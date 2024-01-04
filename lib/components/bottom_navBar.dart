@@ -5,6 +5,7 @@ import 'package:bazar365/modules/menu_page/menu_page.dart';
 import 'package:bazar365/modules/search_page/search_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 
@@ -145,6 +146,7 @@ class BottomNav extends StatefulWidget {
 
 class _BottomNavState extends State<BottomNav> {
   final PageController _myPage = PageController(initialPage: 0);
+  int pageId = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -155,6 +157,7 @@ class _BottomNavState extends State<BottomNav> {
         onPressed: () {
           setState(() {
             _myPage.jumpToPage(2);
+            pageId = 2;
           });
         },
         child: Stack(
@@ -223,56 +226,80 @@ class _BottomNavState extends State<BottomNav> {
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            IconButton(
-              icon: const Icon(
-                Icons.home,
-                color: Colors.black,
-              ),
-              onPressed: () {
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(
-                //     builder: (context) => const HomePage(),
-                //   ),
-                // );
+            GestureDetector(
+              onTap: () {
                 setState(() {
                   _myPage.jumpToPage(0);
+                  pageId = 0;
                 });
               },
-            ),
-            IconButton(
-              icon: const Icon(
-                Icons.search,
-                color: Colors.black,
+              child: SizedBox(
+                height: 24,
+                width: 24,
+                child: SvgPicture.asset('assets/bottom_nav/home.svg',
+                    colorFilter: pageId == 0
+                        ? const ColorFilter.mode(Colors.green, BlendMode.srcIn)
+                        : const ColorFilter.mode(Colors.grey, BlendMode.srcIn)),
               ),
-              onPressed: () {
+            ),
+            GestureDetector(
+              onTap: () {
                 setState(() {
                   _myPage.jumpToPage(1);
+                  pageId = 1;
                 });
               },
-            ),
-            IconButton(
-              icon: const Icon(
-                Icons.print,
-                color: Colors.black,
+              child: SizedBox(
+                height: 24,
+                width: 24,
+                child: SvgPicture.asset('assets/bottom_nav/categories.svg',
+                    colorFilter: pageId == 1
+                        ? const ColorFilter.mode(Colors.green, BlendMode.srcIn)
+                        : const ColorFilter.mode(Colors.grey, BlendMode.srcIn)),
               ),
-              onPressed: () {
+            ),
+            GestureDetector(
+              onTap: () {
                 setState(() {
                   _myPage.jumpToPage(3);
+                  pageId = 3;
                 });
               },
-            ),
-            IconButton(
-              icon: const Icon(
-                Icons.people,
-                color: Colors.black,
+              child: SizedBox(
+                height: 24,
+                width: 24,
+                child: SvgPicture.asset('assets/bottom_nav/search.svg',
+                    colorFilter: pageId == 3
+                        ? const ColorFilter.mode(Colors.green, BlendMode.srcIn)
+                        : const ColorFilter.mode(Colors.grey, BlendMode.srcIn)),
               ),
-              onPressed: () {
-                setState(() {
-                  _myPage.jumpToPage(4);
-                });
-              },
             ),
+            // IconButton(
+            //   icon: ,
+            //   onPressed: () {
+            //     setState(() {
+            //       _myPage.jumpToPage(4);
+            //     });
+            //   },
+            // ),
+
+            GestureDetector(
+                onTap: () {
+                  setState(() {
+                    _myPage.jumpToPage(4);
+                    pageId = 4;
+                  });
+                },
+                child: SizedBox(
+                  height: 24,
+                  width: 24,
+                  child: SvgPicture.asset(
+                    'assets/bottom_nav/menu.svg',
+                    colorFilter: pageId == 4
+                        ? const ColorFilter.mode(Colors.green, BlendMode.srcIn)
+                        : const ColorFilter.mode(Colors.grey, BlendMode.srcIn),
+                  ),
+                ))
           ],
         ),
       ),

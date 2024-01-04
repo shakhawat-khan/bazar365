@@ -21,6 +21,7 @@ class MyApp extends StatelessWidget {
       splitScreenMode: true,
       builder: (context, child) {
         return const GetMaterialApp(
+          debugShowCheckedModeBanner: false,
           home: BottomNav(),
         );
       },

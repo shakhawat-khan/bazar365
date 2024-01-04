@@ -1,3 +1,4 @@
+import 'package:bazar365/modules/home_page/home_page_components/card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -239,7 +240,58 @@ class HomePage extends StatelessWidget {
                   ),
                 )
               ],
-            )
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            // const CardComponent(),
+            Expanded(
+              child: GridView.builder(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2, // number of items in each row
+                  mainAxisSpacing: 6.0, // spacing between rows
+                  crossAxisSpacing: 6.0, // spacing between columns
+                  mainAxisExtent: 256,
+                ),
+                // padding around the grid
+                itemCount: 10, // total number of items
+                itemBuilder: (context, index) {
+                  return const CardComponent();
+                },
+              ),
+            ),
+
+            // Expanded(
+            //   child: GridView.count(
+            //     crossAxisCount: 2,
+            //     children: List.generate(
+            //       10,
+            //       (index) {
+            //         return Container(
+            //           height: 200,
+            //           color: Colors.blue,
+            //           margin: const EdgeInsets.all(10),
+            //           child: Center(
+            //             child: Text(
+            //               'Item $index',
+            //               style: const TextStyle(
+            //                 color: Colors.white,
+            //                 fontSize: 20,
+            //               ),
+            //             ),
+            //           ),
+            //         );
+            //       },
+            //     ),
+            //   ),
+            // )
+
+            // Expanded(
+            //     child: ListView.builder(
+            //         itemCount: 10,
+            //         itemBuilder: (context, index) {
+            //           return const CardComponent();
+            //         }))
           ],
         ),
       ),
