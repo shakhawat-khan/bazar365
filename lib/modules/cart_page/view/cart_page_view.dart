@@ -16,9 +16,28 @@ class CartPage extends StatefulWidget {
 }
 
 class _CartPageState extends State<CartPage> {
+  HomeController homeController = Get.put(HomeController());
+  Future<List<CardModel>> dogs() async {
+    // Get a reference to the database.
+    final database = await db;
+
+    // Query the table for all The Dogs.
+    final List<Map<String, dynamic>> maps = await database.query('cart');
+
+    // Convert the List<Map<String, dynamic> into a List<Dog>.
+    return List.generate(maps.length, (i) {
+      return CardModel(
+        id: maps[i]['id'] as int,
+        name: maps[i]['name'] as String,
+        image: maps[i]['image'] as String,
+        price: maps[i]['price'] as String,
+        discount: maps[i]['discount'] as String,
+      );
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    HomeController homeController = Get.put(HomeController());
     return Scaffold(
       appBar: AppBar(
         title: const Text('Shopping Cart'),
@@ -118,6 +137,8 @@ class _CartPageState extends State<CartPage> {
                       }
 
                       await deleteDog(homeController.checkOutList[index].id!);
+
+                      homeController.checkOutList = await dogs();
 
                       setState(() {});
 
