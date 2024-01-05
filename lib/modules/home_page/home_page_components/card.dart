@@ -1,10 +1,31 @@
+import 'dart:developer';
+
+import 'package:bazar365/modules/home_page/controller/home_controller.dart';
+import 'package:bazar365/modules/home_page/model/card_model.dart';
+import 'package:bazar365/modules/home_page/view/home_page_view.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 
 class CardComponent extends StatelessWidget {
-  const CardComponent({super.key});
+  final int id;
+  final String image;
+  final String price;
+  final String name;
+  final String discount;
+
+  const CardComponent({
+    super.key,
+    required this.id,
+    required this.image,
+    required this.price,
+    required this.name,
+    required this.discount,
+  });
 
   @override
   Widget build(BuildContext context) {
+    HomeController homeController = Get.put(HomeController());
     return SizedBox(
       width: 195,
       height: 269,
@@ -25,26 +46,126 @@ class CardComponent extends StatelessWidget {
                 child: Stack(
                   children: [
                     Positioned(
-                        right: 15,
-                        top: 10,
-                        child: Image.asset('assets/product/image 3.png')),
+                      right: 15,
+                      top: 10,
+                      child: Image.asset(image),
+                    ),
                     Positioned(
                       left: 0,
-                      child: Row(
-                        children: [
-                          Container(
-                            width: 38,
-                            height: 38,
-                            decoration: const BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Colors.green,
+                      child: InkWell(
+                        onTap: () {
+                          homeController.cartCountadd();
+
+                          if (homeController.checkOutList.isEmpty) {
+                            homeController.addCheckOutList(
+                              CardModel(
+                                id: id,
+                                discount: discount,
+                                image: image,
+                                name: name,
+                                price: price,
+                              ),
+                            );
+                          } else {
+                            for (int i = 0;
+                                i < homeController.checkOutList.length;
+                                i++) {
+                              if (homeController.checkOutList[i].id! != id) {
+                                // homeController.addCheckOutList(
+                                //   CardModel(
+                                //     id: id,
+                                //     discount: discount,
+                                //     image: image,
+                                //     name: name,
+                                //     price: price,
+                                //   ),
+                                // );
+
+                                homeController.addCartVariable++;
+                              }
+                            }
+
+                            if (homeController.addCartVariable ==
+                                homeController.checkOutList.length) {
+                              homeController.addCheckOutList(
+                                CardModel(
+                                  id: id,
+                                  discount: discount,
+                                  image: image,
+                                  name: name,
+                                  price: price,
+                                ),
+                              );
+                            }
+                            homeController.addCartVariable = 0;
+                          }
+
+                          // for (CardModel cardModel in cardModelList) {
+                          //   if (!homeController.checkOutList!
+                          //       .any((element) => element.id == id)) {
+                          //     homeController.checkOutList!.add(cardModel);
+                          //   }
+                          // }
+                        },
+                        child: Row(
+                          children: [
+                            Container(
+                              width: 38,
+                              height: 38,
+                              decoration: const BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.green,
+                              ),
+                              child: const Icon(
+                                Icons.add,
+                                color: Colors.white,
+                              ),
                             ),
-                            child: const Icon(
-                              Icons.add,
-                              color: Colors.white,
+                          ],
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      right: -25,
+                      top: -12,
+                      child: Transform(
+                        transform: Matrix4.identity()
+                          ..translate(0.0, 0.0)
+                          ..rotateZ(0.31),
+                        child: Container(
+                          width: 110,
+                          height: 50,
+                          decoration: const ShapeDecoration(
+                            color: Color(0xFF89CF6E),
+                            shape: StarBorder(
+                              points: 20,
+                              innerRadiusRatio: 0.85,
+                              pointRounding: .50,
+                              valleyRounding: 0,
+                              rotation: 0,
+                              squash: .5,
                             ),
                           ),
-                        ],
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      right: 6,
+                      top: 10,
+                      child: Transform(
+                        transform: Matrix4.identity()
+                          ..translate(0.0, 0.0)
+                          ..rotateZ(0.38),
+                        child: Text(
+                          discount,
+                          style: const TextStyle(
+                            color: Color(0xFF744210),
+                            fontSize: 14,
+                            fontFamily: 'Proxima Nova',
+                            fontWeight: FontWeight.w700,
+                            height: 0,
+                          ),
+                        ),
                       ),
                     ),
                   ],
@@ -104,11 +225,11 @@ class CardComponent extends StatelessWidget {
               const SizedBox(
                 height: 6,
               ),
-              const Row(
+              Row(
                 children: [
                   Text(
-                    'Guava Fruit Fresh',
-                    style: TextStyle(
+                    name,
+                    style: const TextStyle(
                       color: Color(0xFF1D1D21),
                       fontSize: 16,
                       fontFamily: 'Proxima Nova',
@@ -150,9 +271,9 @@ class CardComponent extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        const Text(
-                          '৳ 220',
-                          style: TextStyle(
+                        Text(
+                          price,
+                          style: const TextStyle(
                             color: Color(0xFF1D1D21),
                             fontSize: 20,
                             fontFamily: 'Proxima Nova',

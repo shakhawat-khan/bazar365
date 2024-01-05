@@ -1,5 +1,6 @@
 import 'package:bazar365/modules/cart_page/view/cart_page_view.dart';
 import 'package:bazar365/modules/categories_page/categories_page.dart';
+import 'package:bazar365/modules/home_page/controller/home_controller.dart';
 import 'package:bazar365/modules/home_page/view/home_page_view.dart';
 import 'package:bazar365/modules/menu_page/menu_page.dart';
 import 'package:bazar365/modules/search_page/search_page.dart';
@@ -145,164 +146,188 @@ class BottomNav extends StatefulWidget {
 }
 
 class _BottomNavState extends State<BottomNav> {
-  final PageController _myPage = PageController(initialPage: 0);
+  final PageController _myPage = PageController(
+    initialPage: 0,
+  );
   int pageId = 0;
+
+  HomeController homeController = Get.put(HomeController());
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      extendBody: true,
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.green,
-        shape: const CircleBorder(),
-        onPressed: () {
-          setState(() {
-            _myPage.jumpToPage(2);
-            pageId = 2;
-          });
-        },
-        child: Stack(
-          children: [
-            Positioned(
-              top: 5,
-              right: 10,
-              child: Container(
-                width: 15.0, // Adjust the size as needed
-                height: 15.0,
-                decoration: const BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.white, // Change the color as needed
-                ),
-                // You can add child widgets here if needed
-              ),
-            ),
-            const Positioned(
-              top: 15,
-              left: 15,
-              child: Icon(
-                CupertinoIcons.cart,
-                color: Colors.white,
-              ),
-            ),
-            const Positioned(
-              bottom: 5,
-              right: 15,
-              child: SizedBox(
-                width: 27,
-                height: 9,
-                child: Text(
-                  '৳ 220',
-                  style: TextStyle(
-                    color: Color(0xFFF3F3EF),
-                    fontSize: 10,
-                    fontFamily: 'Proxima Nova',
-                    fontWeight: FontWeight.w600,
-                    height: 0,
-                    letterSpacing: -0.20,
-                  ),
-                ),
-              ),
-            )
-          ],
-        ),
-      ),
-      body: PageView(
-        controller: _myPage,
-        children: const [
-          HomePage(),
-          CategoriesPage(),
-          CartPage(),
-          SearchPage(),
-          MenuPage(),
-        ],
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: BottomAppBar(
-        padding: const EdgeInsets.symmetric(horizontal: 10),
-        height: 60,
-        color: Colors.white,
-        shape: const CircularNotchedRectangle(),
-        notchMargin: 5,
-        child: Row(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            GestureDetector(
-              onTap: () {
-                setState(() {
-                  _myPage.jumpToPage(0);
-                  pageId = 0;
-                });
-              },
-              child: SizedBox(
-                height: 24,
-                width: 24,
-                child: SvgPicture.asset('assets/bottom_nav/home.svg',
-                    colorFilter: pageId == 0
-                        ? const ColorFilter.mode(Colors.green, BlendMode.srcIn)
-                        : const ColorFilter.mode(Colors.grey, BlendMode.srcIn)),
-              ),
-            ),
-            GestureDetector(
-              onTap: () {
-                setState(() {
-                  _myPage.jumpToPage(1);
-                  pageId = 1;
-                });
-              },
-              child: SizedBox(
-                height: 24,
-                width: 24,
-                child: SvgPicture.asset('assets/bottom_nav/categories.svg',
-                    colorFilter: pageId == 1
-                        ? const ColorFilter.mode(Colors.green, BlendMode.srcIn)
-                        : const ColorFilter.mode(Colors.grey, BlendMode.srcIn)),
-              ),
-            ),
-            GestureDetector(
-              onTap: () {
-                setState(() {
-                  _myPage.jumpToPage(3);
-                  pageId = 3;
-                });
-              },
-              child: SizedBox(
-                height: 24,
-                width: 24,
-                child: SvgPicture.asset('assets/bottom_nav/search.svg',
-                    colorFilter: pageId == 3
-                        ? const ColorFilter.mode(Colors.green, BlendMode.srcIn)
-                        : const ColorFilter.mode(Colors.grey, BlendMode.srcIn)),
-              ),
-            ),
-            // IconButton(
-            //   icon: ,
-            //   onPressed: () {
-            //     setState(() {
-            //       _myPage.jumpToPage(4);
-            //     });
-            //   },
-            // ),
+    return Obx(() => Scaffold(
+          extendBody: true,
+          floatingActionButton: FloatingActionButton(
+            backgroundColor: Colors.green,
+            shape: const CircleBorder(),
+            onPressed: () {
+              setState(() {
+                _myPage.jumpToPage(2);
+                pageId = 2;
+              });
+            },
+            child: Stack(
+              children: [
+                Positioned(
+                  top: 5,
+                  right: 10,
+                  child: Container(
+                    width: 17.0, // Adjust the size as needed
+                    height: 17.0,
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.white, // Change the color as needed
+                    ),
 
-            GestureDetector(
-                onTap: () {
-                  setState(() {
-                    _myPage.jumpToPage(4);
-                    pageId = 4;
-                  });
-                },
-                child: SizedBox(
-                  height: 24,
-                  width: 24,
-                  child: SvgPicture.asset(
-                    'assets/bottom_nav/menu.svg',
-                    colorFilter: pageId == 4
-                        ? const ColorFilter.mode(Colors.green, BlendMode.srcIn)
-                        : const ColorFilter.mode(Colors.grey, BlendMode.srcIn),
+                    child: Center(
+                      child: Text(
+                        homeController.cartCount.toString(),
+                        style: const TextStyle(color: Colors.green),
+                      ),
+                    ),
+
+                    // You can add child widgets here if needed
                   ),
-                ))
-          ],
-        ),
-      ),
-    );
+                ),
+                const Positioned(
+                  top: 15,
+                  left: 15,
+                  child: Icon(
+                    CupertinoIcons.cart,
+                    color: Colors.white,
+                  ),
+                ),
+                const Positioned(
+                  bottom: 5,
+                  right: 15,
+                  child: SizedBox(
+                    width: 27,
+                    height: 9,
+                    child: Text(
+                      '৳ 220',
+                      style: TextStyle(
+                        color: Color(0xFFF3F3EF),
+                        fontSize: 10,
+                        fontFamily: 'Proxima Nova',
+                        fontWeight: FontWeight.w600,
+                        height: 0,
+                        letterSpacing: -0.20,
+                      ),
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+          body: PageView(
+            controller: _myPage,
+            pageSnapping: false,
+            physics: const NeverScrollableScrollPhysics(),
+            children: const [
+              HomePage(),
+              CategoriesPage(),
+              CartPage(),
+              SearchPage(),
+              MenuPage(),
+            ],
+          ),
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.centerDocked,
+          bottomNavigationBar: BottomAppBar(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            height: 60,
+            color: Colors.white,
+            shape: const CircularNotchedRectangle(),
+            notchMargin: 5,
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      _myPage.jumpToPage(0);
+                      pageId = 0;
+                    });
+                  },
+                  child: SizedBox(
+                    height: 24,
+                    width: 24,
+                    child: SvgPicture.asset('assets/bottom_nav/home.svg',
+                        colorFilter: pageId == 0
+                            ? const ColorFilter.mode(
+                                Colors.green, BlendMode.srcIn)
+                            : const ColorFilter.mode(
+                                Colors.grey, BlendMode.srcIn)),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      _myPage.jumpToPage(1);
+                      pageId = 1;
+                    });
+                  },
+                  child: SizedBox(
+                    height: 24,
+                    width: 24,
+                    child: SvgPicture.asset('assets/bottom_nav/categories.svg',
+                        colorFilter: pageId == 1
+                            ? const ColorFilter.mode(
+                                Colors.green, BlendMode.srcIn)
+                            : const ColorFilter.mode(
+                                Colors.grey, BlendMode.srcIn)),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      _myPage.jumpToPage(3);
+                      pageId = 3;
+                    });
+                  },
+                  child: SizedBox(
+                    height: 24,
+                    width: 24,
+                    child: SvgPicture.asset('assets/bottom_nav/search.svg',
+                        colorFilter: pageId == 3
+                            ? const ColorFilter.mode(
+                                Colors.green, BlendMode.srcIn)
+                            : const ColorFilter.mode(
+                                Colors.grey, BlendMode.srcIn)),
+                  ),
+                ),
+                // IconButton(
+                //   icon: ,
+                //   onPressed: () {
+                //     setState(() {
+                //       _myPage.jumpToPage(4);
+                //     });
+                //   },
+                // ),
+
+                GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        _myPage.jumpToPage(4);
+                        pageId = 4;
+                      });
+                    },
+                    child: SizedBox(
+                      height: 24,
+                      width: 24,
+                      child: SvgPicture.asset(
+                        'assets/bottom_nav/menu.svg',
+                        colorFilter: pageId == 4
+                            ? const ColorFilter.mode(
+                                Colors.green, BlendMode.srcIn)
+                            : const ColorFilter.mode(
+                                Colors.grey, BlendMode.srcIn),
+                      ),
+                    ))
+              ],
+            ),
+          ),
+        ));
   }
 }

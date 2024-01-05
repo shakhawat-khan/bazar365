@@ -1,20 +1,68 @@
+import 'package:bazar365/modules/home_page/controller/home_controller.dart';
 import 'package:bazar365/modules/home_page/home_page_components/card.dart';
+import 'package:bazar365/modules/home_page/model/card_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 
-enum ClassType { classA, classB, ClassC, ClassD }
+List<CardModel> cardModelList = [
+  CardModel(
+    id: 1,
+    image: 'assets/product/image 3.png',
+    discount: '40% OFF',
+    name: 'Orange Fruit Fresh',
+    price: '৳ 220',
+  ),
+  CardModel(
+    id: 2,
+    image: 'assets/product/image 6.png',
+    discount: '20% OFF',
+    name: 'Apple Fruit Fresh',
+    price: '৳ 320',
+  ),
+  CardModel(
+    id: 3,
+    image: 'assets/product/image 8.png',
+    discount: '30% OFF',
+    name: 'Potato  Fresh',
+    price: '৳ 420',
+  ),
+  CardModel(
+    id: 4,
+    image: 'assets/product/image 9.png',
+    discount: '50% OFF',
+    name: 'Carrot Fresh',
+    price: '৳ 520',
+  ),
+  CardModel(
+    id: 5,
+    image: 'assets/product/Variant3.png',
+    discount: '70% OFF',
+    name: 'Carrot Fresh',
+    price: '৳ 420',
+  ),
+];
 
-List<DropdownMenuItem<ClassType>> dropdownItems =
-    ClassType.values.map((ClassType classType) {
-  return DropdownMenuItem<ClassType>(
-    value: classType,
-    child: Text(classType.toString()),
-  );
-}).toList();
+List<DropdownMenuItem<String>> get dropdownItems {
+  List<DropdownMenuItem<String>> menuItems = [
+    const DropdownMenuItem(value: "Name", child: Text("Name")),
+    const DropdownMenuItem(value: "Price", child: Text("Price")),
+  ];
+  return menuItems;
+}
 
-class HomePage extends StatelessWidget {
+String tempValue = 'Name';
+
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  HomeController friendController = Get.put(HomeController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,7 +90,7 @@ class HomePage extends StatelessWidget {
                 Flexible(
                   child: Container(
                     width: 196.w,
-                    height: 40.h,
+                    height: 50.h,
                     padding: const EdgeInsets.only(
                         top: 8, left: 16, right: 12, bottom: 8),
                     clipBehavior: Clip.antiAlias,
@@ -75,10 +123,25 @@ class HomePage extends StatelessWidget {
                             ),
                           ),
                         ),
-                        const Text(
-                          'data',
-                          style: TextStyle(
-                            fontSize: 10,
+                        DropdownButtonHideUnderline(
+                          child: DropdownButton<String>(
+                            value: tempValue,
+                            items: dropdownItems,
+                            onChanged: (String? newValue) {
+                              setState(() {
+                                if (newValue! == 'Price') {
+                                  cardModelList.sort((a, b) {
+                                    return a.price!.compareTo(b.price!);
+                                  });
+                                } else if (newValue == 'Name') {
+                                  cardModelList.sort((a, b) {
+                                    return a.name!.compareTo(b.name!);
+                                  });
+                                }
+
+                                tempValue = newValue;
+                              });
+                            },
                           ),
                         )
                       ],
@@ -254,9 +317,15 @@ class HomePage extends StatelessWidget {
                   mainAxisExtent: 256,
                 ),
                 // padding around the grid
-                itemCount: 10, // total number of items
+                itemCount: cardModelList.length, // total number of items
                 itemBuilder: (context, index) {
-                  return const CardComponent();
+                  return CardComponent(
+                    image: cardModelList[index].image!,
+                    price: cardModelList[index].price!,
+                    name: cardModelList[index].name!,
+                    discount: cardModelList[index].discount!,
+                    id: cardModelList[index].id!,
+                  );
                 },
               ),
             ),
