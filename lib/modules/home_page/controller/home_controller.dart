@@ -10,7 +10,7 @@ class HomeController extends GetxController {
 
   int addCartVariable = 0;
 
-  List<CardModel> checkOutList = <CardModel>[].obs;
+  RxList<CardModel> checkOutList = <CardModel>[].obs;
 
   void cartCountadd() {
     cartCount = cartCount + 1;

@@ -4,7 +4,9 @@ class CardModel {
   final String? price;
   final String? name;
   final String? discount;
+  final int? quantity;
   CardModel({
+    this.quantity,
     this.id,
     this.image,
     this.price,

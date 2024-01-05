@@ -9,7 +9,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:sqflite/sqflite.dart';
 
-class CardComponent extends StatelessWidget {
+class CardComponent extends StatefulWidget {
   final int id;
   final String image;
   final String price;
@@ -24,6 +24,26 @@ class CardComponent extends StatelessWidget {
     required this.name,
     required this.discount,
   });
+
+  @override
+  State<CardComponent> createState() => _CardComponentState();
+}
+
+class _CardComponentState extends State<CardComponent> {
+  Future<void> insertCart(CardModel cardModel) async {
+    // Get a reference to the database.
+    final database = await db;
+
+    // Insert the Dog into the correct table. You might also specify the
+    // `conflictAlgorithm` to use in case the same dog is inserted twice.
+    //
+    // In this case, replace any previous data.
+    await database.insert(
+      'cart',
+      cardModel.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,29 +70,39 @@ class CardComponent extends StatelessWidget {
                     Positioned(
                       right: 15,
                       top: 10,
-                      child: Image.asset(image),
+                      child: Image.asset(widget.image),
                     ),
                     Positioned(
                       left: 0,
                       child: InkWell(
-                        onTap: () {
+                        onTap: () async {
                           homeController.cartCountadd();
 
                           if (homeController.checkOutList.isEmpty) {
-                            homeController.addCheckOutList(
+                            // homeController.addCheckOutList(
+                            //   CardModel(
+                            //     id: widget.id,
+                            //     discount: widget.discount,
+                            //     image: widget.image,
+                            //     name: widget.name,
+                            //     price: widget.price,
+                            //   ),
+                            // );
+                            insertCart(
                               CardModel(
-                                id: id,
-                                discount: discount,
-                                image: image,
-                                name: name,
-                                price: price,
+                                id: widget.id,
+                                discount: widget.discount,
+                                image: widget.image,
+                                name: widget.name,
+                                price: widget.price,
                               ),
                             );
                           } else {
                             for (int i = 0;
                                 i < homeController.checkOutList.length;
                                 i++) {
-                              if (homeController.checkOutList[i].id! != id) {
+                              if (homeController.checkOutList[i].id! !=
+                                  widget.id) {
                                 // homeController.addCheckOutList(
                                 //   CardModel(
                                 //     id: id,
@@ -91,29 +121,15 @@ class CardComponent extends StatelessWidget {
                                 homeController.checkOutList.length) {
                               homeController.addCheckOutList(
                                 CardModel(
-                                  id: id,
-                                  discount: discount,
-                                  image: image,
-                                  name: name,
-                                  price: price,
+                                  id: widget.id,
+                                  discount: widget.discount,
+                                  image: widget.image,
+                                  name: widget.name,
+                                  price: widget.price,
                                 ),
                               );
                             }
                             homeController.addCartVariable = 0;
-                          }
-                          Future<void> insertDog(CardModel cardModel) async {
-                            // Get a reference to the database.
-                            final database = await db;
-
-                            // Insert the Dog into the correct table. You might also specify the
-                            // `conflictAlgorithm` to use in case the same dog is inserted twice.
-                            //
-                            // In this case, replace any previous data.
-                            await database.insert(
-                              'cart',
-                              cardModel.toMap(),
-                              conflictAlgorithm: ConflictAlgorithm.replace,
-                            );
                           }
 
                           // for (CardModel cardModel in cardModelList) {
@@ -122,15 +138,41 @@ class CardComponent extends StatelessWidget {
                           //     homeController.checkOutList!.add(cardModel);
                           //   }
                           // }
-                          insertDog(
+                          insertCart(
                             CardModel(
-                              id: id,
-                              discount: discount,
-                              image: image,
-                              name: name,
-                              price: price,
+                              id: widget.id,
+                              discount: widget.discount,
+                              image: widget.image,
+                              name: widget.name,
+                              price: widget.price,
                             ),
                           );
+
+                          Future<List<CardModel>> cartList() async {
+                            // Get a reference to the database.
+                            final database = await db;
+
+                            // Query the table for all The Dogs.
+                            final List<Map<String, dynamic>> maps =
+                                await database.query('cart');
+
+                            // Convert the List<Map<String, dynamic> into a List<Dog>.
+                            return List.generate(maps.length, (i) {
+                              return CardModel(
+                                id: maps[i]['id'] as int,
+                                name: maps[i]['name'] as String,
+                                image: maps[i]['image'] as String,
+                                price: maps[i]['price'] as String,
+                                discount: maps[i]['discount'] as String,
+                              );
+                            });
+                          }
+
+                          homeController.checkOutList.value = await cartList();
+
+                          log(homeController.checkOutList.length.toString());
+
+                          setState(() {});
                         },
                         child: Row(
                           children: [
@@ -182,7 +224,7 @@ class CardComponent extends StatelessWidget {
                           ..translate(0.0, 0.0)
                           ..rotateZ(0.38),
                         child: Text(
-                          discount,
+                          widget.discount,
                           style: const TextStyle(
                             color: Color(0xFF744210),
                             fontSize: 14,
@@ -253,7 +295,7 @@ class CardComponent extends StatelessWidget {
               Row(
                 children: [
                   Text(
-                    name,
+                    widget.name,
                     style: const TextStyle(
                       color: Color(0xFF1D1D21),
                       fontSize: 16,
@@ -297,7 +339,7 @@ class CardComponent extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text(
-                          price,
+                          widget.price,
                           style: const TextStyle(
                             color: Color(0xFF1D1D21),
                             fontSize: 20,

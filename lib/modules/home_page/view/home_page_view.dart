@@ -1,3 +1,4 @@
+import 'package:bazar365/main.dart';
 import 'package:bazar365/modules/home_page/controller/home_controller.dart';
 import 'package:bazar365/modules/home_page/home_page_components/card.dart';
 import 'package:bazar365/modules/home_page/model/card_model.dart';
@@ -8,40 +9,40 @@ import 'package:get/get_core/src/get_main.dart';
 
 List<CardModel> cardModelList = [
   CardModel(
-    id: 1,
-    image: 'assets/product/image 3.png',
-    discount: '40% OFF',
-    name: 'Orange Fruit Fresh',
-    price: '৳ 220',
-  ),
+      id: 1,
+      image: 'assets/product/image 3.png',
+      discount: '40% OFF',
+      name: 'Orange Fruit Fresh',
+      price: '৳ 220',
+      quantity: 1),
   CardModel(
-    id: 2,
-    image: 'assets/product/image 6.png',
-    discount: '20% OFF',
-    name: 'Apple Fruit Fresh',
-    price: '৳ 320',
-  ),
+      id: 2,
+      image: 'assets/product/image 6.png',
+      discount: '20% OFF',
+      name: 'Apple Fruit Fresh',
+      price: '৳ 320',
+      quantity: 1),
   CardModel(
-    id: 3,
-    image: 'assets/product/image 8.png',
-    discount: '30% OFF',
-    name: 'Potato  Fresh',
-    price: '৳ 420',
-  ),
+      id: 3,
+      image: 'assets/product/image 8.png',
+      discount: '30% OFF',
+      name: 'Potato  Fresh',
+      price: '৳ 420',
+      quantity: 1),
   CardModel(
-    id: 4,
-    image: 'assets/product/image 9.png',
-    discount: '50% OFF',
-    name: 'Carrot Fresh',
-    price: '৳ 520',
-  ),
+      id: 4,
+      image: 'assets/product/image 9.png',
+      discount: '50% OFF',
+      name: 'Carrot Fresh',
+      price: '৳ 520',
+      quantity: 1),
   CardModel(
-    id: 5,
-    image: 'assets/product/Variant3.png',
-    discount: '70% OFF',
-    name: 'Carrot Fresh',
-    price: '৳ 420',
-  ),
+      id: 5,
+      image: 'assets/product/Variant3.png',
+      discount: '70% OFF',
+      name: 'Carrot Fresh',
+      price: '৳ 420',
+      quantity: 1),
 ];
 
 List<DropdownMenuItem<String>> get dropdownItems {
@@ -62,7 +63,36 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  HomeController friendController = Get.put(HomeController());
+  HomeController homeController = Get.put(HomeController());
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      Future<List<CardModel>> cartList() async {
+        // Get a reference to the database.
+        final database = await db;
+
+        // Query the table for all The Dogs.
+        final List<Map<String, dynamic>> maps = await database.query('cart');
+
+        // Convert the List<Map<String, dynamic> into a List<Dog>.
+        return List.generate(maps.length, (i) {
+          return CardModel(
+            id: maps[i]['id'] as int,
+            name: maps[i]['name'] as String,
+            image: maps[i]['image'] as String,
+            price: maps[i]['price'] as String,
+            discount: maps[i]['discount'] as String,
+          );
+        });
+      }
+
+      homeController.checkOutList.value = await cartList();
+    });
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

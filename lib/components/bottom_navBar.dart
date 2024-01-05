@@ -165,7 +165,7 @@ class _BottomNavState extends State<BottomNav> {
             backgroundColor: Colors.green,
             shape: const CircleBorder(),
             onPressed: () async {
-              Future<List<CardModel>> dogs() async {
+              Future<List<CardModel>> cartList() async {
                 // Get a reference to the database.
                 final database = await db;
 
@@ -185,7 +185,7 @@ class _BottomNavState extends State<BottomNav> {
                 });
               }
 
-              homeController.checkOutList = await dogs();
+              homeController.checkOutList.value = await cartList();
 
               setState(() {
                 _myPage.jumpToPage(2);
