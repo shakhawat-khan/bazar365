@@ -11,4 +11,14 @@ class CardModel {
     this.name,
     this.discount,
   });
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'image': image,
+      'price': price,
+      'name': name,
+      'discount': discount,
+    };
+  }
 }

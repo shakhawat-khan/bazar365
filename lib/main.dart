@@ -3,9 +3,27 @@ import 'package:bazar365/modules/home_page/view/home_page_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
+import 'package:sqflite/sqflite.dart';
+import 'package:path/path.dart';
+
+late Future<Database> db;
 
 void main() async {
   await ScreenUtil.ensureScreenSize();
+  WidgetsFlutterBinding.ensureInitialized();
+  db = openDatabase(
+    // Set the path to the database. Note: Using the `join` function from the
+    // `path` package is best practice to ensure the path is correctly
+    // constructed for each platform.
+    join(await getDatabasesPath(), 'cart.db'),
+    onCreate: (db, version) {
+      // Run the CREATE TABLE statement on the database.
+      return db.execute(
+        'CREATE TABLE cart(id INTEGER PRIMARY KEY, image TEXT, price TEXT,name TEXT,discount TEXT)',
+      );
+    },
+    version: 1,
+  );
   runApp(const MyApp());
 }
 

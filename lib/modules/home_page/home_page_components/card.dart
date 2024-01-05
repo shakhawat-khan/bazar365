@@ -1,11 +1,13 @@
 import 'dart:developer';
 
+import 'package:bazar365/main.dart';
 import 'package:bazar365/modules/home_page/controller/home_controller.dart';
 import 'package:bazar365/modules/home_page/model/card_model.dart';
 import 'package:bazar365/modules/home_page/view/home_page_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:sqflite/sqflite.dart';
 
 class CardComponent extends StatelessWidget {
   final int id;
@@ -99,6 +101,20 @@ class CardComponent extends StatelessWidget {
                             }
                             homeController.addCartVariable = 0;
                           }
+                          Future<void> insertDog(CardModel cardModel) async {
+                            // Get a reference to the database.
+                            final database = await db;
+
+                            // Insert the Dog into the correct table. You might also specify the
+                            // `conflictAlgorithm` to use in case the same dog is inserted twice.
+                            //
+                            // In this case, replace any previous data.
+                            await database.insert(
+                              'cart',
+                              cardModel.toMap(),
+                              conflictAlgorithm: ConflictAlgorithm.replace,
+                            );
+                          }
 
                           // for (CardModel cardModel in cardModelList) {
                           //   if (!homeController.checkOutList!
@@ -106,6 +122,15 @@ class CardComponent extends StatelessWidget {
                           //     homeController.checkOutList!.add(cardModel);
                           //   }
                           // }
+                          insertDog(
+                            CardModel(
+                              id: id,
+                              discount: discount,
+                              image: image,
+                              name: name,
+                              price: price,
+                            ),
+                          );
                         },
                         child: Row(
                           children: [
@@ -320,7 +345,7 @@ class CardComponent extends StatelessWidget {
                     ),
                   )
                 ],
-              )
+              ),
             ],
           ),
         ),

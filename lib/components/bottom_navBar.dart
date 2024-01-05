@@ -1,6 +1,10 @@
+import 'dart:math';
+
+import 'package:bazar365/main.dart';
 import 'package:bazar365/modules/cart_page/view/cart_page_view.dart';
 import 'package:bazar365/modules/categories_page/categories_page.dart';
 import 'package:bazar365/modules/home_page/controller/home_controller.dart';
+import 'package:bazar365/modules/home_page/model/card_model.dart';
 import 'package:bazar365/modules/home_page/view/home_page_view.dart';
 import 'package:bazar365/modules/menu_page/menu_page.dart';
 import 'package:bazar365/modules/search_page/search_page.dart';
@@ -160,7 +164,29 @@ class _BottomNavState extends State<BottomNav> {
           floatingActionButton: FloatingActionButton(
             backgroundColor: Colors.green,
             shape: const CircleBorder(),
-            onPressed: () {
+            onPressed: () async {
+              Future<List<CardModel>> dogs() async {
+                // Get a reference to the database.
+                final database = await db;
+
+                // Query the table for all The Dogs.
+                final List<Map<String, dynamic>> maps =
+                    await database.query('cart');
+
+                // Convert the List<Map<String, dynamic> into a List<Dog>.
+                return List.generate(maps.length, (i) {
+                  return CardModel(
+                    id: maps[i]['id'] as int,
+                    name: maps[i]['name'] as String,
+                    image: maps[i]['image'] as String,
+                    price: maps[i]['price'] as String,
+                    discount: maps[i]['discount'] as String,
+                  );
+                });
+              }
+
+              homeController.checkOutList = await dogs();
+
               setState(() {
                 _myPage.jumpToPage(2);
                 pageId = 2;
@@ -181,7 +207,7 @@ class _BottomNavState extends State<BottomNav> {
 
                     child: Center(
                       child: Text(
-                        homeController.cartCount.toString(),
+                        homeController.checkOutList.length.toString(),
                         style: const TextStyle(color: Colors.green),
                       ),
                     ),
