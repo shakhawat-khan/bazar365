@@ -5,6 +5,7 @@ import 'package:bazar365/modules/home_page/controller/home_controller.dart';
 import 'package:bazar365/modules/home_page/model/card_model.dart';
 import 'package:bazar365/modules/home_page/view/home_page_view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:sqflite/sqflite.dart';
@@ -296,9 +297,9 @@ class _CardComponentState extends State<CardComponent> {
                 children: [
                   Text(
                     widget.name,
-                    style: const TextStyle(
-                      color: Color(0xFF1D1D21),
-                      fontSize: 16,
+                    style: TextStyle(
+                      color: const Color(0xFF1D1D21),
+                      fontSize: 16.sp,
                       fontFamily: 'Proxima Nova',
                       fontWeight: FontWeight.w600,
                       height: 0,

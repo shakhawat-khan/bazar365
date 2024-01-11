@@ -1,5 +1,7 @@
 import 'package:bazar365/components/bottom_navBar.dart';
 import 'package:bazar365/modules/home_page/view/home_page_view.dart';
+import 'package:device_preview/device_preview.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
@@ -24,7 +26,13 @@ void main() async {
     },
     version: 1,
   );
-  runApp(const MyApp());
+
+  runApp(
+    DevicePreview(
+      enabled: !kReleaseMode,
+      builder: (context) => const MyApp(), // Wrap your app
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {

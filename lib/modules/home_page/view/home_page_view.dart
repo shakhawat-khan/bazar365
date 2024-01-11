@@ -47,7 +47,12 @@ List<CardModel> cardModelList = [
 
 List<DropdownMenuItem<String>> get dropdownItems {
   List<DropdownMenuItem<String>> menuItems = [
-    const DropdownMenuItem(value: "Name", child: Text("Name")),
+    const DropdownMenuItem(
+        value: "Name",
+        child: Text(
+          "Name",
+          style: TextStyle(),
+        )),
     const DropdownMenuItem(value: "Price", child: Text("Price")),
   ];
   return menuItems;
@@ -119,10 +124,9 @@ class _HomePageState extends State<HomePage> {
               children: [
                 Flexible(
                   child: Container(
-                    width: 196.w,
+                    width: 200.w,
                     height: 50.h,
-                    padding: const EdgeInsets.only(
-                        top: 8, left: 16, right: 12, bottom: 8),
+                    padding: const EdgeInsets.only(top: 8, left: 16, bottom: 8),
                     clipBehavior: Clip.antiAlias,
                     decoration: ShapeDecoration(
                       color: Colors.white,
@@ -153,25 +157,27 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ),
                         ),
-                        DropdownButtonHideUnderline(
-                          child: DropdownButton<String>(
-                            value: tempValue,
-                            items: dropdownItems,
-                            onChanged: (String? newValue) {
-                              setState(() {
-                                if (newValue! == 'Price') {
-                                  cardModelList.sort((a, b) {
-                                    return a.price!.compareTo(b.price!);
-                                  });
-                                } else if (newValue == 'Name') {
-                                  cardModelList.sort((a, b) {
-                                    return a.name!.compareTo(b.name!);
-                                  });
-                                }
+                        Flexible(
+                          child: DropdownButtonHideUnderline(
+                            child: DropdownButton<String>(
+                              value: tempValue,
+                              items: dropdownItems,
+                              onChanged: (String? newValue) {
+                                setState(() {
+                                  if (newValue! == 'Price') {
+                                    cardModelList.sort((a, b) {
+                                      return a.price!.compareTo(b.price!);
+                                    });
+                                  } else if (newValue == 'Name') {
+                                    cardModelList.sort((a, b) {
+                                      return a.name!.compareTo(b.name!);
+                                    });
+                                  }
 
-                                tempValue = newValue;
-                              });
-                            },
+                                  tempValue = newValue;
+                                });
+                              },
+                            ),
                           ),
                         )
                       ],
