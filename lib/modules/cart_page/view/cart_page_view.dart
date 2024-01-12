@@ -314,6 +314,17 @@ class _CartPageState extends State<CartPage> {
                         );
                       }
 
+                      String numericString = homeController
+                          .checkOutList[index].price!
+                          .replaceAll("৳", "")
+                          .trim();
+
+                      // Convert the numeric string to an integer
+                      int value = int.tryParse(numericString) ?? 0;
+
+                      homeController.subtotal.value =
+                          homeController.subtotal.value - value;
+
                       await deleteList(homeController.checkOutList[index].id!);
 
                       homeController.checkOutList.value = await cartListAll();
