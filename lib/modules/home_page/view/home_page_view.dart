@@ -48,17 +48,29 @@ List<CardModel> cardModelList = [
 List<DropdownMenuItem<String>> get dropdownItems {
   List<DropdownMenuItem<String>> menuItems = [
     const DropdownMenuItem(
-        value: "Name",
-        child: Text(
-          "Name",
-          style: TextStyle(),
-        )),
-    const DropdownMenuItem(value: "Price", child: Text("Price")),
+      value: "Name",
+      child: Text(
+        "Name",
+        style: TextStyle(),
+      ),
+    ),
+    const DropdownMenuItem(
+      value: "Price",
+      child: Text(
+        "Price",
+      ),
+    ),
+    const DropdownMenuItem(
+      value: "None",
+      child: Text(
+        "None",
+      ),
+    ),
   ];
   return menuItems;
 }
 
-String tempValue = 'Name';
+String tempValue = 'None';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -172,6 +184,8 @@ class _HomePageState extends State<HomePage> {
                                     cardModelList.sort((a, b) {
                                       return a.name!.compareTo(b.name!);
                                     });
+                                  } else if (newValue == 'None') {
+                                    cardModelList.shuffle();
                                   }
 
                                   tempValue = newValue;
@@ -187,80 +201,100 @@ class _HomePageState extends State<HomePage> {
                 const SizedBox(
                   width: 10,
                 ),
-                SizedBox(
-                  width: 14,
-                  height: 40,
-                  child: Stack(
-                    children: [
-                      const Positioned(
-                        left: 0,
-                        right: 0,
-                        top: 26,
-                        child: SizedBox(
-                          width: 14,
-                          height: 14,
-                          child: Stack(children: [
-                            Icon(
-                              Icons.arrow_downward_rounded,
-                              color: Color(0xFF001E00),
-                            )
-                          ]),
-                        ),
-                      ),
-                      Positioned(
-                        left: 11,
-                        top: 2,
-                        child: Container(
-                          width: 2,
-                          height: 35,
-                          decoration: ShapeDecoration(
-                            color: const Color(0xFF001E00),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30),
+                Column(
+                  children: [
+                    if (tempValue == 'None')
+                      ...[]
+                    else if (tempValue == 'Price') ...[
+                      Row(
+                        children: [
+                          const DownArrow(),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          SizedBox(
+                            width: 21.w,
+                            height: 44.h,
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                SizedBox(
+                                  width: 11.w,
+                                  height: 20.h,
+                                  child: Text(
+                                    '1',
+                                    style: TextStyle(
+                                      color: const Color(0xFF001E00),
+                                      fontSize: 16.sp,
+                                      fontFamily: 'Proxima Nova',
+                                      fontWeight: FontWeight.w400,
+                                      height: 0.09,
+                                    ),
+                                  ),
+                                ),
+                                Text(
+                                  '10',
+                                  style: TextStyle(
+                                    color: const Color(0xFF001E00),
+                                    fontSize: 16.sp,
+                                    fontFamily: 'Proxima Nova',
+                                    fontWeight: FontWeight.w400,
+                                    height: 0.09.h,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(
-                  width: 10,
-                ),
-                SizedBox(
-                  width: 11.w,
-                  height: 44.h,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        width: 11.w,
-                        height: 20.h,
-                        child: Text(
-                          'A',
-                          style: TextStyle(
-                            color: const Color(0xFF001E00),
-                            fontSize: 16.sp,
-                            fontFamily: 'Proxima Nova',
-                            fontWeight: FontWeight.w400,
-                            height: 0.09,
+                        ],
+                      )
+                    ] else if (tempValue == 'Name') ...[
+                      Row(
+                        children: [
+                          const DownArrow(),
+                          const SizedBox(
+                            width: 10,
                           ),
-                        ),
-                      ),
-                      Text(
-                        'Z',
-                        style: TextStyle(
-                          color: const Color(0xFF001E00),
-                          fontSize: 16.sp,
-                          fontFamily: 'Proxima Nova',
-                          fontWeight: FontWeight.w400,
-                          height: 0.09.h,
-                        ),
-                      ),
+                          SizedBox(
+                            width: 11.w,
+                            height: 44.h,
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                SizedBox(
+                                  width: 11.w,
+                                  height: 20.h,
+                                  child: Text(
+                                    'A',
+                                    style: TextStyle(
+                                      color: const Color(0xFF001E00),
+                                      fontSize: 16.sp,
+                                      fontFamily: 'Proxima Nova',
+                                      fontWeight: FontWeight.w400,
+                                      height: 0.09,
+                                    ),
+                                  ),
+                                ),
+                                Text(
+                                  'Z',
+                                  style: TextStyle(
+                                    color: const Color(0xFF001E00),
+                                    fontSize: 16.sp,
+                                    fontFamily: 'Proxima Nova',
+                                    fontWeight: FontWeight.w400,
+                                    height: 0.09.h,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      )
                     ],
-                  ),
+                  ],
                 ),
                 SizedBox(
                   width: 18.w,
@@ -399,6 +433,53 @@ class _HomePageState extends State<HomePage> {
             //         }))
           ],
         ),
+      ),
+    );
+  }
+}
+
+class DownArrow extends StatelessWidget {
+  const DownArrow({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 14,
+      height: 40,
+      child: Stack(
+        children: [
+          const Positioned(
+            left: 0,
+            right: 0,
+            top: 26,
+            child: SizedBox(
+              width: 14,
+              height: 14,
+              child: Stack(children: [
+                Icon(
+                  Icons.arrow_downward_rounded,
+                  color: Color(0xFF001E00),
+                )
+              ]),
+            ),
+          ),
+          Positioned(
+            left: 11,
+            top: 2,
+            child: Container(
+              width: 2,
+              height: 35,
+              decoration: ShapeDecoration(
+                color: const Color(0xFF001E00),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
