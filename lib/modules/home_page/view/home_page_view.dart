@@ -395,6 +395,7 @@ class _HomePageState extends State<HomePage> {
                     name: cardModelList[index].name!,
                     discount: cardModelList[index].discount!,
                     id: cardModelList[index].id!,
+                    quantity: cardModelList[index].quantity!,
                   );
                 },
               ),

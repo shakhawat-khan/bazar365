@@ -10,6 +10,8 @@ class HomeController extends GetxController {
 
   int addCartVariable = 0;
 
+  RxInt subtotal = 0.obs;
+
   RxList<CardModel> checkOutList = <CardModel>[].obs;
 
   void cartCountadd() {

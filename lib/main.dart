@@ -21,10 +21,10 @@ void main() async {
     onCreate: (db, version) {
       // Run the CREATE TABLE statement on the database.
       return db.execute(
-        'CREATE TABLE cart(id INTEGER PRIMARY KEY, image TEXT, price TEXT,name TEXT,discount TEXT)',
+        'CREATE TABLE cart(id INTEGER PRIMARY KEY, image TEXT, price TEXT,name TEXT,discount TEXT,quantity INTEGER)',
       );
     },
-    version: 1,
+    version: 3,
   );
 
   runApp(

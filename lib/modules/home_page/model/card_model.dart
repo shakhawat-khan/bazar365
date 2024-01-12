@@ -4,7 +4,7 @@ class CardModel {
   final String? price;
   final String? name;
   final String? discount;
-  final int? quantity;
+  int? quantity;
   CardModel({
     this.quantity,
     this.id,
@@ -21,6 +21,7 @@ class CardModel {
       'price': price,
       'name': name,
       'discount': discount,
+      'quantity': quantity
     };
   }
 }

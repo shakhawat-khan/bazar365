@@ -176,16 +176,29 @@ class _BottomNavState extends State<BottomNav> {
                 // Convert the List<Map<String, dynamic> into a List<Dog>.
                 return List.generate(maps.length, (i) {
                   return CardModel(
-                    id: maps[i]['id'] as int,
-                    name: maps[i]['name'] as String,
-                    image: maps[i]['image'] as String,
-                    price: maps[i]['price'] as String,
-                    discount: maps[i]['discount'] as String,
-                  );
+                      id: maps[i]['id'] as int,
+                      name: maps[i]['name'] as String,
+                      image: maps[i]['image'] as String,
+                      price: maps[i]['price'] as String,
+                      discount: maps[i]['discount'] as String,
+                      quantity: maps[i]['quantity'] as int);
                 });
               }
 
               homeController.checkOutList.value = await cartList();
+
+              if (homeController.subtotal.value == 0) {
+                for (int i = 0; i < homeController.checkOutList.length; i++) {
+                  String numericString = homeController.checkOutList[i].price!
+                      .replaceAll("৳", "")
+                      .trim();
+
+                  // Convert the numeric string to an integer
+                  int value = int.tryParse(numericString) ?? 0;
+                  homeController.subtotal.value =
+                      homeController.subtotal.value + value;
+                }
+              }
 
               setState(() {
                 _myPage.jumpToPage(2);
@@ -216,32 +229,32 @@ class _BottomNavState extends State<BottomNav> {
                   ),
                 ),
                 const Positioned(
-                  top: 15,
+                  top: 20,
                   left: 15,
                   child: Icon(
                     CupertinoIcons.cart,
                     color: Colors.white,
                   ),
                 ),
-                const Positioned(
-                  bottom: 5,
-                  right: 15,
-                  child: SizedBox(
-                    width: 27,
-                    height: 9,
-                    child: Text(
-                      '৳ 220',
-                      style: TextStyle(
-                        color: Color(0xFFF3F3EF),
-                        fontSize: 10,
-                        fontFamily: 'Proxima Nova',
-                        fontWeight: FontWeight.w600,
-                        height: 0,
-                        letterSpacing: -0.20,
-                      ),
-                    ),
-                  ),
-                )
+                // const Positioned(
+                //   bottom: 5,
+                //   right: 15,
+                //   child: SizedBox(
+                //     width: 27,
+                //     height: 9,
+                //     child: Text(
+                //       '৳ 220',
+                //       style: TextStyle(
+                //         color: Color(0xFFF3F3EF),
+                //         fontSize: 10,
+                //         fontFamily: 'Proxima Nova',
+                //         fontWeight: FontWeight.w600,
+                //         height: 0,
+                //         letterSpacing: -0.20,
+                //       ),
+                //     ),
+                //   ),
+                // )
               ],
             ),
           ),

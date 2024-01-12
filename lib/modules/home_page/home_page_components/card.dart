@@ -16,15 +16,16 @@ class CardComponent extends StatefulWidget {
   final String price;
   final String name;
   final String discount;
+  final int quantity;
 
-  const CardComponent({
-    super.key,
-    required this.id,
-    required this.image,
-    required this.price,
-    required this.name,
-    required this.discount,
-  });
+  const CardComponent(
+      {super.key,
+      required this.id,
+      required this.image,
+      required this.price,
+      required this.name,
+      required this.discount,
+      required this.quantity});
 
   @override
   State<CardComponent> createState() => _CardComponentState();
@@ -91,12 +92,12 @@ class _CardComponentState extends State<CardComponent> {
                             // );
                             insertCart(
                               CardModel(
-                                id: widget.id,
-                                discount: widget.discount,
-                                image: widget.image,
-                                name: widget.name,
-                                price: widget.price,
-                              ),
+                                  id: widget.id,
+                                  discount: widget.discount,
+                                  image: widget.image,
+                                  name: widget.name,
+                                  price: widget.price,
+                                  quantity: widget.quantity),
                             );
                           } else {
                             for (int i = 0;
@@ -127,6 +128,7 @@ class _CardComponentState extends State<CardComponent> {
                                   image: widget.image,
                                   name: widget.name,
                                   price: widget.price,
+                                  quantity: widget.quantity,
                                 ),
                               );
                             }
@@ -141,12 +143,12 @@ class _CardComponentState extends State<CardComponent> {
                           // }
                           insertCart(
                             CardModel(
-                              id: widget.id,
-                              discount: widget.discount,
-                              image: widget.image,
-                              name: widget.name,
-                              price: widget.price,
-                            ),
+                                id: widget.id,
+                                discount: widget.discount,
+                                image: widget.image,
+                                name: widget.name,
+                                price: widget.price,
+                                quantity: widget.quantity),
                           );
 
                           Future<List<CardModel>> cartList() async {
@@ -160,12 +162,12 @@ class _CardComponentState extends State<CardComponent> {
                             // Convert the List<Map<String, dynamic> into a List<Dog>.
                             return List.generate(maps.length, (i) {
                               return CardModel(
-                                id: maps[i]['id'] as int,
-                                name: maps[i]['name'] as String,
-                                image: maps[i]['image'] as String,
-                                price: maps[i]['price'] as String,
-                                discount: maps[i]['discount'] as String,
-                              );
+                                  id: maps[i]['id'] as int,
+                                  name: maps[i]['name'] as String,
+                                  image: maps[i]['image'] as String,
+                                  price: maps[i]['price'] as String,
+                                  discount: maps[i]['discount'] as String,
+                                  quantity: maps[i]['quantity'] as int);
                             });
                           }
 

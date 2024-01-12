@@ -18,6 +18,21 @@ class CartPage extends StatefulWidget {
 
 class _CartPageState extends State<CartPage> {
   HomeController homeController = Get.put(HomeController());
+  Future<void> updateCart(CardModel cardModel) async {
+    // Get a reference to the database.
+    final database = await db;
+
+    // Update the given Dog.
+    await database.update(
+      'cart',
+      cardModel.toMap(),
+      // Ensure that the Dog has a matching id.
+      where: 'id = ?',
+      // Pass the Dog's id as a whereArg to prevent SQL injection.
+      whereArgs: [cardModel.id],
+    );
+  }
+
   Future<List<CardModel>> cartListAll() async {
     // Get a reference to the database.
     final database = await db;
@@ -28,12 +43,12 @@ class _CartPageState extends State<CartPage> {
     // Convert the List<Map<String, dynamic> into a List<Dog>.
     return List.generate(maps.length, (i) {
       return CardModel(
-        id: maps[i]['id'] as int,
-        name: maps[i]['name'] as String,
-        image: maps[i]['image'] as String,
-        price: maps[i]['price'] as String,
-        discount: maps[i]['discount'] as String,
-      );
+          id: maps[i]['id'] as int,
+          name: maps[i]['name'] as String,
+          image: maps[i]['image'] as String,
+          price: maps[i]['price'] as String,
+          discount: maps[i]['discount'] as String,
+          quantity: maps[i]['quantity'] as int);
     });
   }
 
@@ -54,9 +69,10 @@ class _CartPageState extends State<CartPage> {
                   Container(
                     width: 115,
                     height: 34,
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 16, vertical: 2),
-                    clipBehavior: Clip.antiAlias,
+                    // padding:
+                    padding: const EdgeInsets.only(left: 10),
+                    //     // const EdgeInsets.symmetric(horizontal: 16, vertical: 2),,
+                    // decorationClipBehavior: Clip.antiAlias,
                     decoration: ShapeDecoration(
                       color: const Color(0xFFF5F5F5),
                       shape: RoundedRectangleBorder(
@@ -66,25 +82,94 @@ class _CartPageState extends State<CartPage> {
                       ),
                     ),
                     child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         InkWell(
-                          onTap: () {},
-                          child: const Text(
-                            '-',
-                            style: TextStyle(
-                              color: Color(0xFF001E00),
-                              fontSize: 16,
-                              fontFamily: 'Roboto',
-                              fontWeight: FontWeight.w400,
-                              height: 0.08,
-                              letterSpacing: -0.32,
+                          onTap: () async {
+                            log('message');
+
+                            String numericString = homeController
+                                .checkOutList[index].price!
+                                .replaceAll("৳", "")
+                                .trim();
+
+                            // Convert the numeric string to an integer
+                            int value = int.tryParse(numericString) ?? 0;
+
+                            double temp = value /
+                                homeController.checkOutList[index].quantity!;
+
+                            value = value + temp.toInt();
+
+                            homeController.subtotal.value =
+                                homeController.subtotal.value + temp.toInt();
+
+                            updateCart(
+                              CardModel(
+                                id: homeController.checkOutList[index].id,
+                                quantity: homeController
+                                        .checkOutList[index].quantity! +
+                                    1,
+                                discount:
+                                    homeController.checkOutList[index].discount,
+                                image: homeController.checkOutList[index].image,
+                                name: homeController.checkOutList[index].name,
+                                price: '৳$value',
+                              ),
+                            );
+                            Future<List<CardModel>> cartList() async {
+                              // Get a reference to the database.
+                              final database = await db;
+
+                              // Query the table for all The Dogs.
+                              final List<Map<String, dynamic>> maps =
+                                  await database.query('cart');
+
+                              // Convert the List<Map<String, dynamic> into a List<Dog>.
+                              return List.generate(maps.length, (i) {
+                                return CardModel(
+                                  id: maps[i]['id'] as int,
+                                  name: maps[i]['name'] as String,
+                                  image: maps[i]['image'] as String,
+                                  price: maps[i]['price'] as String,
+                                  discount: maps[i]['discount'] as String,
+                                  quantity: maps[i]['quantity'] as int,
+                                );
+                              });
+                            }
+
+                            homeController.checkOutList.value =
+                                await cartList();
+                            log(
+                              homeController.checkOutList[index].quantity
+                                  .toString(),
+                            );
+
+                            setState(() {});
+                          },
+                          child: Container(
+                            height: 20,
+                            width: 20,
+                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.green,
+                            ),
+                            child: const Icon(
+                              Icons.add,
+                              color: Colors.white,
+                              size: 15,
                             ),
                           ),
                         ),
-                        const SizedBox(width: 27),
-                        const Text(
-                          '2',
-                          style: TextStyle(
+
+                        const SizedBox(
+                          width: 20,
+                        ),
+
+                        Text(
+                          homeController.checkOutList[index].quantity
+                              .toString(),
+                          style: const TextStyle(
                             color: Color(0xFF001E00),
                             fontSize: 14,
                             fontFamily: 'Roboto',
@@ -93,21 +178,107 @@ class _CartPageState extends State<CartPage> {
                             letterSpacing: -0.28,
                           ),
                         ),
-                        const SizedBox(width: 27),
+                        const SizedBox(
+                          width: 20,
+                        ),
+
                         InkWell(
-                          onTap: () {},
-                          child: const Text(
-                            '+',
-                            style: TextStyle(
-                              color: Color(0xFF001E00),
-                              fontSize: 16,
-                              fontFamily: 'Roboto',
-                              fontWeight: FontWeight.w400,
-                              height: 0.08,
-                              letterSpacing: -0.32,
+                          onTap: () async {
+                            log('message');
+                            String numericString = homeController
+                                .checkOutList[index].price!
+                                .replaceAll("৳", "")
+                                .trim();
+
+                            // Convert the numeric string to an integer
+                            int value = int.tryParse(numericString) ?? 0;
+
+                            double temp = value /
+                                homeController.checkOutList[index].quantity!;
+
+                            if (homeController.checkOutList[index].quantity! >
+                                1) {
+                              homeController.subtotal.value =
+                                  homeController.subtotal.value - temp.toInt();
+                              value = value - temp.toInt();
+                            }
+
+                            updateCart(
+                              CardModel(
+                                  id: homeController.checkOutList[index].id,
+                                  quantity: homeController
+                                              .checkOutList[index].quantity! ==
+                                          1
+                                      ? homeController
+                                          .checkOutList[index].quantity = 1
+                                      : homeController
+                                              .checkOutList[index].quantity! -
+                                          1,
+                                  discount: homeController
+                                      .checkOutList[index].discount,
+                                  image:
+                                      homeController.checkOutList[index].image,
+                                  name: homeController.checkOutList[index].name,
+                                  price: '৳$value'),
+                            );
+                            Future<List<CardModel>> cartList() async {
+                              // Get a reference to the database.
+                              final database = await db;
+
+                              // Query the table for all The Dogs.
+                              final List<Map<String, dynamic>> maps =
+                                  await database.query('cart');
+
+                              // Convert the List<Map<String, dynamic> into a List<Dog>.
+                              return List.generate(maps.length, (i) {
+                                return CardModel(
+                                  id: maps[i]['id'] as int,
+                                  name: maps[i]['name'] as String,
+                                  image: maps[i]['image'] as String,
+                                  price: maps[i]['price'] as String,
+                                  discount: maps[i]['discount'] as String,
+                                  quantity: maps[i]['quantity'] as int,
+                                );
+                              });
+                            }
+
+                            homeController.checkOutList.value =
+                                await cartList();
+                            log(
+                              homeController.checkOutList[index].quantity
+                                  .toString(),
+                            );
+                            setState(() {});
+                          },
+                          child: Container(
+                            height: 20,
+                            width: 20,
+                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.green,
+                            ),
+                            child: const Icon(
+                              Icons.remove,
+                              color: Colors.white,
+                              size: 15,
                             ),
                           ),
                         ),
+
+                        // InkWell(
+                        //   onTap: () {},
+                        //   child: const Text(
+                        //     '+',
+                        //     style: TextStyle(
+                        //       color: Color(0xFF001E00),
+                        //       fontSize: 16,
+                        //       fontFamily: 'Roboto',
+                        //       fontWeight: FontWeight.w400,
+                        //       height: 0.08,
+                        //       letterSpacing: -0.32,
+                        //     ),
+                        //   ),
+                        // ),
                       ],
                     ),
                   ),
@@ -162,6 +333,7 @@ class _CartPageState extends State<CartPage> {
                             image: maps[i]['image'] as String,
                             price: maps[i]['price'] as String,
                             discount: maps[i]['discount'] as String,
+                            quantity: maps[i]['quantity'] as int,
                           );
                         });
                       }
@@ -208,12 +380,12 @@ class _CartPageState extends State<CartPage> {
       persistentFooterButtons: <Widget>[
         Column(
           children: [
-            const Row(
+            Row(
               children: [
-                SizedBox(
+                const SizedBox(
                   width: 10,
                 ),
-                Text(
+                const Text(
                   'Subtotal',
                   style: TextStyle(
                     color: Color(0xFF001E00),
@@ -224,10 +396,10 @@ class _CartPageState extends State<CartPage> {
                     letterSpacing: -0.36,
                   ),
                 ),
-                Spacer(),
+                const Spacer(),
                 Text(
-                  'Tk. 641',
-                  style: TextStyle(
+                  '৳${homeController.subtotal.value.toString()}',
+                  style: const TextStyle(
                     color: Color(0xFF001E00),
                     fontSize: 18,
                     fontFamily: 'Proxima Nova',
