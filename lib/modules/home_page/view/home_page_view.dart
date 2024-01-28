@@ -134,68 +134,61 @@ class _HomePageState extends State<HomePage> {
           children: [
             Row(
               children: [
-                Flexible(
-                  child: Container(
-                    width: 200.w,
-                    height: 50.h,
-                    padding: const EdgeInsets.only(top: 8, left: 16, bottom: 8),
-                    clipBehavior: Clip.antiAlias,
-                    decoration: ShapeDecoration(
-                      color: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        side: const BorderSide(
-                            width: 1, color: Color(0xFFE0E0E0)),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
+                Container(
+                  width: 200.w,
+                  height: 50.h,
+                  padding: const EdgeInsets.only(top: 8, left: 16, bottom: 8),
+                  clipBehavior: Clip.antiAlias,
+                  decoration: ShapeDecoration(
+                    color: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      side:
+                          const BorderSide(width: 1, color: Color(0xFFE0E0E0)),
+                      borderRadius: BorderRadius.circular(8),
                     ),
-                    child: Row(
-                      children: [
-                        SizedBox(
-                          width: 60.w,
-                          child: Text.rich(
-                            TextSpan(
-                              children: [
-                                TextSpan(
-                                  text: 'Sort By',
-                                  style: TextStyle(
-                                    color: const Color(0xFF858693),
-                                    fontSize: 16.sp,
-                                    fontFamily: 'Proxima Nova',
-                                    fontWeight: FontWeight.w400,
-                                    height: 0.09,
-                                  ),
+                  ),
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        width: 60.w,
+                        child: const Text.rich(
+                          TextSpan(
+                            children: [
+                              TextSpan(
+                                text: 'Sort',
+                                style: TextStyle(
+                                  color: Color(0xFF858693),
+                                  fontSize: 16,
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
                         ),
-                        Flexible(
-                          child: DropdownButtonHideUnderline(
-                            child: DropdownButton<String>(
-                              value: tempValue,
-                              items: dropdownItems,
-                              onChanged: (String? newValue) {
-                                setState(() {
-                                  if (newValue! == 'Price') {
-                                    cardModelList.sort((a, b) {
-                                      return a.price!.compareTo(b.price!);
-                                    });
-                                  } else if (newValue == 'Name') {
-                                    cardModelList.sort((a, b) {
-                                      return a.name!.compareTo(b.name!);
-                                    });
-                                  } else if (newValue == 'None') {
-                                    cardModelList.shuffle();
-                                  }
-
-                                  tempValue = newValue;
+                      ),
+                      DropdownButtonHideUnderline(
+                        child: DropdownButton<String>(
+                          value: tempValue,
+                          items: dropdownItems,
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              if (newValue! == 'Price') {
+                                cardModelList.sort((a, b) {
+                                  return a.price!.compareTo(b.price!);
                                 });
-                              },
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
+                              } else if (newValue == 'Name') {
+                                cardModelList.sort((a, b) {
+                                  return a.name!.compareTo(b.name!);
+                                });
+                              } else if (newValue == 'None') {
+                                cardModelList.shuffle();
+                              }
+
+                              tempValue = newValue;
+                            });
+                          },
+                        ),
+                      )
+                    ],
                   ),
                 ),
                 const SizedBox(
@@ -313,12 +306,9 @@ class _HomePageState extends State<HomePage> {
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    crossAxisAlignment: CrossAxisAlignment.center,
+                  child: const Row(
                     children: [
-                      const SizedBox(
+                      SizedBox(
                         width: 70,
                         child: Text.rich(
                           TextSpan(
@@ -328,9 +318,6 @@ class _HomePageState extends State<HomePage> {
                                 style: TextStyle(
                                   color: Color(0xFF858693),
                                   fontSize: 16,
-                                  fontFamily: 'Proxima Nova',
-                                  fontWeight: FontWeight.w400,
-                                  height: 0.09,
                                 ),
                               ),
                               TextSpan(
@@ -338,35 +325,17 @@ class _HomePageState extends State<HomePage> {
                                 style: TextStyle(
                                   color: Color(0xFF001E00),
                                   fontSize: 16,
-                                  fontFamily: 'Proxima Nova',
-                                  fontWeight: FontWeight.w400,
-                                  height: 0.09,
                                 ),
                               ),
                               TextSpan(
-                                text: '16',
+                                text: '5',
                                 style: TextStyle(
                                   color: Color(0xFF001E00),
                                   fontSize: 16,
-                                  fontFamily: 'Proxima Nova',
-                                  fontWeight: FontWeight.w700,
-                                  height: 0.09,
                                 ),
                               ),
                             ],
                           ),
-                        ),
-                      ),
-                      Container(
-                        width: 20,
-                        height: 20,
-                        clipBehavior: Clip.antiAlias,
-                        decoration: const BoxDecoration(),
-                        child: const Column(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [],
                         ),
                       ),
                     ],

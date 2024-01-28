@@ -334,18 +334,15 @@ class _CardComponentState extends State<CardComponent> {
               Row(
                 children: [
                   SizedBox(
-                    width: 104,
-                    height: 20,
+                    width: 140.w,
+                    height: 25.h,
                     child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text(
                           widget.price,
                           style: const TextStyle(
                             color: Color(0xFF1D1D21),
-                            fontSize: 20,
+                            fontSize: 18,
                             fontFamily: 'Proxima Nova',
                             fontWeight: FontWeight.w700,
                             height: 0,
@@ -354,8 +351,8 @@ class _CardComponentState extends State<CardComponent> {
                         ),
                         const SizedBox(width: 8),
                         SizedBox(
-                          width: 42,
-                          height: 16,
+                          width: 42.w,
+                          height: 20.h,
                           child: Stack(
                             children: [
                               const Positioned(
